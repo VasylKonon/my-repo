@@ -41,7 +41,12 @@ def transactions(acc):
         print(f'Operation type: {trans["type"]} with amount: {trans["amount"]}')
 
 
+def show_balance():
+    print(account['balance'])
+
+
 def operations():
+    print('Enter 0 if you want to see balance')
     print('Enter 1 if you want to withdraw')
     print('Enter 2 if you want to deposit')
     print('Enter 3 if you want to see the list of transactions')
@@ -76,7 +81,9 @@ if __name__ == '__main__':
                     break
             while True:
                 choose_2 = operations()
-                if choose_2 == '1':
+                if choose_2 == '0':
+                    show_balance()
+                elif choose_2 == '1':
                     wth = int(input('How much you want to withdraw: '))
                     withdraw(account, wth)
                 elif choose_2 == '2':
