@@ -24,9 +24,9 @@ def write_todo_list(todo_list, filename):
 filename = 'hw9.txt'
 todo_list = read_todo_list(filename)
 
-answer = input('Select the action(add, edit, del, get). For quit press "q": ')
 
-while answer != 'q':
+while True:
+    answer = input('Select the action(add, edit, del, get). For quit press "q": ')
     if answer == 'add':
         a = len(todo_list) + 1
         task = input('Enter what you want to add: ')
@@ -45,10 +45,11 @@ while answer != 'q':
         todo_list[z] = 'Empty task'
     elif answer == 'get':
         print('Your list of tasks:', todo_list)
+    elif answer == 'q':
+        break
     else:
         print('Unknown action. Please, try again.')
 
-    answer = input('Select the action(add, edit, del, get). For quit press "q": ')
 
 write_todo_list(todo_list, filename)
 
