@@ -8,6 +8,6 @@ def retry(max_retries, exc):
                 except Exception:
                     retries += 1
                     if retries > max_retries:
-                        return exc
+                        raise exc
         return inner
     return decorator
