@@ -5,7 +5,10 @@ class BankAccount:
         self.amount_of_money = amount_of_money
 
     def withdrawal(self, other):
-        self.amount_of_money -= other
+        if self.amount_of_money == 0 or self.amount_of_money - other < 0:
+            print("Not enough money")
+        else:
+            self.amount_of_money -= other
 
     def deposit(self, other):
         self.amount_of_money += other
@@ -16,7 +19,7 @@ class BankAccount:
 
 bank_account = BankAccount("Vasyl", "4441", 500)
 print(bank_account)
-bank_account.withdrawal(150)
+bank_account.withdrawal(1000)
 print(bank_account)
 bank_account.deposit(200)
 print(bank_account)
