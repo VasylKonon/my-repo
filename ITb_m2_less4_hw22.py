@@ -8,7 +8,7 @@ def timeit(func):
         func()
         print("stop")
         stop = time.time()
-        print(start - stop)
+        print(stop - start)
 
     return inner
 
