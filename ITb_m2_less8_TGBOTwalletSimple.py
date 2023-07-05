@@ -1,5 +1,5 @@
 import logging
-
+import pickle
 from datetime import datetime
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CallbackContext, CommandHandler
@@ -26,6 +26,22 @@ class Operation:
     def __str__(self):
         completed = "➕" if self.inc_or_exp else "➖"
         return f"{completed} {self.category} {self.amount}"
+
+
+def save_data():
+    with open("test.pkl", "wb") as file:
+        pickle.dump((user_data_income, user_data_expense), file)
+
+
+def load_data():
+    try:
+        with open("test.pkl", "rb") as file:
+            data = pickle.load(file)
+            global user_data_income, user_data_expense
+            user_data_income, user_data_expense = data
+    except (FileNotFoundError, EOFError):
+        user_data_income = dict()
+        user_data_expense = dict()
 
 
 async def start(update: Update, context: CallbackContext) -> None:
@@ -65,6 +81,7 @@ async def add_income(update: Update, context: CallbackContext) -> None:
     operation.inc_or_exp = True
     user_data_income[user_id].append(operation)
     await update.message.reply_text(f"{operation} was successfully added!")
+    save_data()
 
 
 async def add_expense(update: Update, context: CallbackContext) -> None:
@@ -90,6 +107,7 @@ async def add_expense(update: Update, context: CallbackContext) -> None:
     operation = Operation(operation_category, int(amount))
     user_data_expense[user_id].append(operation)
     await update.message.reply_text(f"{operation} was successfully added!")
+    save_data()
 
 
 async def for_help(update: Update, context: CallbackContext) -> None:
@@ -242,6 +260,8 @@ async def remove_expense(update: Update, context: CallbackContext) -> None:
     except (ValueError, IndexError):
         await update.message.reply_text("You entered invalid index.")
 
+    save_data()
+
 
 async def remove_income(update: Update, context: CallbackContext) -> None:
     logging.info("Command /remove_exp was triggered.")
@@ -257,6 +277,8 @@ async def remove_income(update: Update, context: CallbackContext) -> None:
         await update.message.reply_text(f"{expense} successfully removed.")
     except (ValueError, IndexError):
         await update.message.reply_text("You entered invalid index.")
+
+    save_data()
 
 
 async def statistic_income_by_category(update: Update, context: CallbackContext) -> None:
@@ -346,4 +368,5 @@ def run():
 
 
 if __name__ == "__main__":
+    load_data()
     run()
